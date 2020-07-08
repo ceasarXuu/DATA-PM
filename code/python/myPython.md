@@ -1,11 +1,8 @@
-# myPython
+# 笔记-《利用python进行数据分析》
 
-> Writer : Ceasar
-
-> Date : 2020-04-01 
 ---
 
-## 数据结构
+## 1. 数据结构
 
 ### 字典
 
@@ -24,11 +21,11 @@ mapping = dict(zip(range(5), reversed(range(5))))
 value = some_dict.get(key, default_value)
 ```
 
-## 内置函数
+## 2. 内置函数
 
 blabla
 
-## 重要模块
+## 3. 重要模块
 
 ### numpy
 
