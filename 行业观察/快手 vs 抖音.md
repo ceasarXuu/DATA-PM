@@ -13,3 +13,9 @@
 抖音：中心流量分发
 
 快手：社区信任关系
+
+
+
+## 数据表现
+
+https://www.questmobile.com.cn/research/report-new/58
