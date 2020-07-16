@@ -19,3 +19,7 @@
 ## 数据表现
 
 https://www.questmobile.com.cn/research/report-new/58
+
+![image-20200713131013601](assets/image-20200713131013601.png)
+
+![image-20200713131348218](assets/image-20200713131348218.png)
