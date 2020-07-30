@@ -1,0 +1,661 @@
+# 笔记-《利用python进行数据分析》
+
+---
+
+## 1. 工具：Jupyter/iPython
+
+### 1.1 补全
+
+tab键补全
+
+### 1.2 问号的作用
+
+变量名后加一个？，看概要信息；
+
+函数后加两个？，看函数源代码；
+
+numpy.*load*?：在numpy顶层函数中找带有load的函数名列表
+
+### 1.3 %run 命令
+
+```python
+%run hello.py
+```
+
+
+
+执行hello.py文件，执行成功后，hello.py中的变量可以在jupyter中使用。
+
+如果python脚本需要传参，则通过sys.argv获得，使用%run -i ，在文件路径后面进行参数传递
+
+### 1.4 %load 命令
+
+将脚本的代码加载到jupyter的一个命令单元里
+
+```python
+%load hello.py
+```
+
+### 1.5 中断运行中的代码
+
+Ctrl + C
+
+当一段代码被其他已经编译的扩展模块调用，Ctrl + C 无法停止
+
+### 1.6 魔术命令
+
+IPython自带的（不在python中），用于简化任务和控制IPython
+
+前缀是%，当命令名没有被定义为变量时也可不加%使用
+
+
+
+## 2. python语言基础
+
+### 零碎
+
+以缩进组织代码，#注释，符号与空格
+
+一切都是对象，
+
+等号赋值（也称为绑定），不是拷贝，而是创建一个引用，如下b和a都指向同一个[1, 2, 3]数组
+
+```python
+a = [1, 2, 3]
+b = a
+```
+
+python是强类型语言，变量只是对象在某个命名空间中的名字，对象的类型信息存储在自身中，隐式转换只在特定且明显的情况下发生
+
+调用对象的函数/方法： object.method_name(x, y, z)
+
+调用对象的属性：object.attribute_name
+
+鸭子类型
+
+import 导入统一路径下的其他模块（模块就是.py文件），as 关键字给模块命名
+
+检查两个引用是否指向同一个对象，用 is 关键字， a is b ，返回True则a、b指向同一对象；is not 检查是否指向不是同一个对象。 常用于检查一个变量是否为None，None只有一个实例。
+
+可变与不可变对象：大部分对象是可变的，少量如字符串、元组，不可变。修改对象通常会导致副作用，应写好注释。如果可能的话尽可能是用不可变的对象。
+
+### 标量类型
+
+Python的标准库中拥有一个小的内建类型集合，用来处理数值数据、字符串、布尔值（True或False）以及日期和时间。
+
+```
+None：python中的null值，只有一个实例。当一个函数没有显式地返回值，则会隐式返回None。常用作默认参数值
+str：字符串，包含Unicode（UTF-8）字符串，是一种Unicode字符序列。不可变类型，无法修改。
+bytes：原生ASCII字节
+float：双精度64位浮点数（没有double类型）
+bool：布尔
+int：任意精度、无符号整数。可存储任意大小数字
+```
+
+时间模块datatime：datatime(yyyy, MM, dd, hh, mm ,ss)，可以用date和time方法获得date和time对象，strftime()将datetime转换为字符串，strptime()将对象转为datetime
+
+
+
+### 控制流
+
+if、elif 和 else
+
+for循环
+
+while循环
+
+pass：代码占位符，什么都不做
+
+range：返回一个迭代器，生成等差数列
+
+三元表达式
+
+
+
+## 3. 内建数据结构、函数及文件
+
+### 3.1 数据结构和序列
+
+#### 3.1.1 元组（小括号）
+
+不可变
+
+拆包
+
+count方法
+
+#### 3.1.2 列表（中括号）
+
+可变
+
+修改方法：append追加，insert插入指定位置，pop从指定位置移除并返回，remove指定值
+
+查询方法：value_name in list_name ，变量是否在列表中
+
+连接：list_1 + list_2，该操作需要复制对象、创建新列表，代价较高，
+
+排序：sort()；bisect()用于向已排序的列表插值，并保持排序
+
+切片：list [start : top : step]
+
+#### 3.1.3 内建序列函数
+
+enumerate，用于建立索引构建字典，返回 (i, value) 元组的序列
+
+```python
+some_list = ['foo', 'bar', 'baz']
+mapping = {}
+for (i, value) in enumerate(some_list):
+    # do something
+    mapping[value] = i
+print(mapping)
+
+>>> out: {'foo' : 0, 'bar' : 1, 'baz' : 2}
+```
+
+sorted(some_list) 返回一个新建并进行过排序的列表
+
+```python
+sorted([2, 1, 0])
+>>> out: [0, 1, 2]
+```
+
+zip(list1, list2)  将两个或多个序列元素配对组成列表，长度由最短的序列决定
+zip(*list3) 可以拆分已配对的序列list3
+
+reversed将已排序的序列倒排，他是一个生成器，必须实例化才真正产生一个倒序列表
+
+#### 3.1.4 字典（大括号+键值对）
+
+del 或 pop 方法删除键值对，pop 方法会返回值
+
+keys 和 values 方法分别提供键、值的迭代器
+
+d1.update(d2) 将两个字典合并，若d2的键在d1中已存在，则d2的值会覆盖d1的值
+
+使用序列生成字典↓
+
+```python
+mapping = dict(zip(range(5), reversed(range(5))))
+print(mapping)
+>>> out {0:4, 1:3, 2:2, 3:1, 4:0}
+```
+
+默认值（这块没太看懂，之后再研究下）
+
+键必须是不可变的对象如标量类型（如整数、浮点数、字符串）或元组（元组内也必须是不可变对象），即可hash化，用 hash( ) 检查，可hash的就是不可变对象，可作为字典的键。为了将list作为键，可将其转换为元组
+
+#### 3.1.5 集合（大括号）
+
+无序且元素唯一。可以用set方法生成或直接用大括号
+
+```python
+# set方法生成
+set([2, 2, 3, 4])
+# 大括号生成
+{2, 2, 3, 4}
+```
+
+支持数学上的集合操作。
+
+#### 3.1.6 列表、集合和字典的推导式
+
+列表推导式
+
+```python
+[expr for val in collection if condition]
+# 等价于
+result = [ ]
+for val in collection:
+    if condition:
+        result.append(expr)
+# 对于 collection 中的每个 val ，当 condition 为 True 时，执行 expr， 生成一个新的列表。 condition是可选项
+```
+
+字典推导式
+
+```python
+{key-expr : value-expr for value in collection if condition}
+```
+
+集合推导式
+
+```python
+{expr for value in collection if condition}
+```
+
+嵌套列表推导式
+
+```python
+太迷幻，先跳过
+```
+
+
+
+### 3.2 函数
+
+def 声明，return 返回值，无return时自动返回None
+
+位置参数用于占位，关键字参数用来提供默认值，关键字参数必须在位置参数之后，关键字参数的位置可以任意指定
+
+#### 3.2.1 命名空间、作用域和本地函数
+
+命名空间是用来描述变量作用域的
+
+函数内部的变量，默认分配到本地命名空间。本地命名空间在函数调用时生成，由函数参数填充，函数执行结束后本地命名空间通常被销毁。
+
+在函数外部给变量赋值，需要在函数中用global关键字声明为全局变量。全局变量通常用来存储系统中的某些状态，如果大量使用全局变量，可能需要考虑使用类来解决。
+
+```python
+a = None
+def bind_a_variable():
+	global a
+    a = [1, 2]
+bind_a_variable()
+print(a)
+>>> out: [1, 2]
+```
+
+#### 3.2.2 返回多个值
+
+```python
+def f():
+    a = 5
+    b = 6
+    c = 7
+    return a, b, c
+a, b, c = f()
+```
+
+本质是返回了一个对象（元组） ，被拆包为多个变量使用。
+
+#### 3.2.3 函数是对象
+
+将函数作为对象可以方便的复用。
+
+函数可以作为一个参数传给其他函数进行应用
+
+#### 3.2.4 匿名（Lambda）函数
+
+通过简单的单个语句生成函数，结果是返回值。
+
+代码量小，清晰，作为参数使用方便。
+
+#### 3.2.5 柯里化
+
+将某函数的部分参数处理一下，生成一个新函数
+
+#### 3.2.6 生成器
+
+在函数中，用 yield 代替 return 即创建了一个生成器。用于构造新的可遍历对象。
+
+生成器表达式，略
+
+itertools模块：一个生成器集合，适用于大多数数据算法。
+
+
+#### 3.2.7 错误和异常处理
+
+```python
+def attempt_float(x):
+    try:
+        return float(x)
+    except:
+        return x
+```
+
+当 try 中代码块执行异常，则会执行 except 中的代码
+
+```python
+def attempt_float(x):
+    try:
+        return float(x)
+    except ValueError: 
+    # 多个异常可以写成 except (TypeError, ValueError):
+        return x
+```
+
+except 后可以声明这部分代码只针对于某类错误，其他的错误扔抛出异常
+
+```python
+f = open(path, 'w')
+try:
+	write_to_file(f)
+except:
+    print('Failed')
+else:
+    print('Success')
+finally:
+    f.close()
+```
+
+Finally 中的代码，无论程序是否有异常，都将被执行
+
+### 3.3 文件与操作系统
+
+使用 open(file_path) 来打开文件，默认使用只读模式 'r' 打开文件。这时文件成为一个python对象，可以像处理列表一样处理文件的行
+
+```python
+path = 'python_work/readme.md'
+f = open(path)
+for line in f:
+    print(line)
+f.close()
+```
+
+操作结束时必须显示的关闭文件，将文件资源释放。
+
+```python
+with open(path) as f:
+    lines = [x.rstrip() for x in f]
+```
+
+使用 with 语句，文件会在 with 代码块结束后自动关闭
+
+句柄
+
+#### 3.3.1 字节与Unicode文件
+
+略 
+
+## 4. NumPy基础：数组与向量化计算
+
+### 4.1 NumPy ndarry：多维数组对象
+
+#### 4.1.1 生成ndarry
+
+使用 array 函数。array接收**任意的序列型对象**，生成新的numpy数组
+
+```python
+data1 = [6, 7, 8]
+arr1 = np.array(data1)
+print(arr1)
+>>>out: array([6, 7, 8])
+```
+
+除非显式指定，否则 np.array 将自动推断生成的数组的数据类型，数据类型存储在元数据 dtype 中，可以用 arr1.dtype 查询
+
+np.zeros( ) 创建全0数组。
+
+np.empty( ) 创建没有初始化数值的数组，其值不一定是0，不能用于创建全0数组。
+
+np.arange( int ) 生成从0到 int - 1 序列
+
+#### 4.1.2 ndarray的数据类型
+
+numpy的默认数值类型都是 float64，可以用以下方式指定
+
+```python
+# 指定ndarry的数据类型为int32
+arr1 = np.array([1, 2, 3], dtype = np.int32)
+```
+
+可以使用 arr.astype( ) 方法显式的转换数组类型，astype( ) 方法会返回一个改变类型之后的数组，原数组并没有被改变。
+
+```python
+arr1 = [1, 2, 3] # 默认float64
+arr2 = arr1.astype(np.int32) # 此时arr1仍是float64，arr2是int32
+arr1 = arr1.astype(np.int32) # 此时arr1被修改为指向int32类型的数组
+```
+
+浮点数转换为整数时，小数部分消除。
+
+#### 4.1.3 NumPy数组算数
+
+不用编写循环即可进行矢量化运算，对数组的算数操作会逐一应用到所有元素。
+
+- 数组间：
+    -   大小相等的数组间的运算都会应用到元素级
+    -   大小相等的数组间比较会得到布尔数组
+    -   大小不同的数组间运算叫广播broadcasting
+- 数组与标量：标量值会广播到每个元素
+
+ #### 4.1.4 基础索引与切片
+
+ndarry的切片是源ndarry的视图（可以理解为局部引用），**改变切片的值就是直接改变源数组**，若想复制这个切片使用且不改变原数组，应当使用 ```arr[5:8].copy()```；
+
+多维的切片使用 ```arr2d[1:2, 2:3]```来表示； 多维索引中，```arr2d[0][2]``` 和```arr2d[0,2]```是等价的； 混合切片索引`arr2d[1, :1]`可以取得第二行的前两列；
+
+布尔索引：通过传入布尔索引（数组），取得数组中索引值为true的元素；使用条件是布尔数组的长度要与被索引的轴的长度一致，否则会出错，但不会报错，要注意；布尔索引同样可以和切片、整数等混合使用；布尔索引的生成可以利用很多布尔运算的技巧；通过**布尔索引选取的数组，将总是创建数据副本**，即不会改变源数组；python 关键字 and 和 or 对布尔数组没有用，需要使用 & 和 | 符号。
+
+花式索引：使用整数数组进行指定位置的索引；与切片不同的是，**花式索引将创建数据副本**；
+
+```python
+# 若有一个 8x4 的数组
+arr[[2, 3, 1]] # 按顺序取出第三行、第四行、第二行
+arr[[2, 3, 1], [0, 2, 4]] # 取出第三行第一列、第四行第三列、第二行第五列
+```
+
+
+
+#### 4.1.7数组转至与轴对换
+
+`arr.T` 每个数组都有一个T属性，返回数组的简单转置
+
+`arr.transpose((1,0,2))` transpose方法需要传入一个由编号组成的元组，此例中表示第一个轴换到了第二个，第二个轴换到了第一个，第三个轴不变。
+
+`arr.swapaxes(1,2)`swapaxes方法需要接受一对轴编号，进行对换
+
+### 4.2 通用函数（ufunc）
+
+指对ndarry执行元素级运算的函数；
+
+ufuncs接受out选项参数，可以在数组原地进行操作（直接改变源数组）`np.sqrt(arr, arr) # 第二个arr就是out参数位`
+
+### 4.3 利用数组进行数据处理
+
+矢量化：利用数组表达式代替循环，提高效率（比等价纯python方式快1~2个数量级，甚至更多）
+
+#### 4.3.1 将条件逻辑作为数组操作
+
+where函数：`np.where(cond, xarr, yarr)`当cond中的值为True，选xarr的值，否则选yarr的值。where 的第二第三个参数不一定是数组，也可以是标量。常用于根据一个数组生成一个新的数组（不改变原数组），如：
+
+```python
+# 将某数组中的正数替换为2，负数替换为-2
+np.where(arr > 0, 2, -2)
+# 将某数组中的正数替换为2，其他的不变
+np.where(arr > 0, 2, arr)
+```
+
+
+
+#### 4.3.2 数学和统计方法
+
+一些聚合、约简等数学函数可以对整个数组或某个轴向进行统计
+
+具体函数略
+
+#### 4.3.3 布尔型数组的方法
+
+数组中的布尔值在数学函数中被转换为0和1进行计算，`bool_arr.sum()`方法常用于计算true的个数；
+
+`bool_arr.any()`方法检查是否至少存在一个Ture；
+
+`bool_arr.all()`检查是否全是True
+
+#### 4.3.4 排序
+
+ndarray 可以使用 sort( ) 方法，默认升序。
+
+其他略
+
+#### 4.3.5 唯一值与其他集合逻辑
+
+`np.unique(arr)` 将 arr 中的唯一值找出并排序，返回。用纯python方法 `sorted(set(arr))` 也可以实现。
+
+`np.in1d(arr1, arr2)` 检查 arr1 中的值是否存在于 arr2 中，返回一个一维的 bool 数组
+
+### 4.4 使用数组进行文件输入和输出
+
+`np.save('arr.npy', arr)` 将 arr 存储为一个 .npy 文件，默认以未压缩的方式存储；
+`np.savez('arr.npz', a = arr1, b = arr2)` 同时存储多个数组到 .npz 文件
+
+`np.load('arr.npy')` 读取 arr.npy 文件
+
+```python
+np.savez('arr.npz', a = arr1, b = arr2)
+arch = np.load('arr.npz') # arch 是一个字典
+print(arch['a']) # 可以方便的取用 arr1
+```
+
+
+
+### 4.5 线性代数
+
+`np.dot(x, y) 等价于 x.dot(y) 等价于 x @ y ` 是两个矩阵的乘积
+
+其他略
+
+### 4.6 伪随机数生成
+
+`samples = np.random.normal(size = (4, 4))` 生成一个4x4的正态分布随机样本
+
+python内建random模块一次只能生成一个值，np.random在生成大型样本时比python方式快一个数量级。
+
+伪随机数是由具有确定性行为的算法，根据随机数种子生成的，`np.random.seed(1234)` 可以将种子更改为1234。这里的种子是np.random全局种子，为了避免全局状态，可以用 `np.random.RandomState` 生成一个随机数生成器，使数据独立于其他的随机数状态：
+
+```python
+rng = np.random.RandomState(1234) # 一个名叫rng的random生成器
+rng.randn(10)
+```
+
+
+
+## ### 随机漫步
+
+略
+
+## 5.pandas入门
+
+### 5.1.1 Series 序列
+
+一种一维数组型对象，包含一个值序列，及其数据标签（索引）
+
+```python
+# 创建一个带自定义索引的序列，不定义的话默认是从0到N-1
+obj = pd.Sesies([1, 2, 4, 3], index = ['a', 'b', 'c', 'd']) 
+# 获取值
+obj.values
+# 获取索引
+obj.index
+# 使用索引获得值
+obj['a']
+```
+
+对值进行操作后，仍与其对应的索引保持连接。
+
+可以将Series看做一个固定长度、固定顺序的字典，字典可以用于生成Series。
+
+```python
+# 用字典生成一个Series
+obj = pd.Series(dict)
+# 可以指定索引的范围和顺序,若list中的值在dict键中没有，则对应值为NaN，若dict某键在list中没有，则该键值对不会出现在obj中
+obj = pd.Series(dict, index = list)
+```
+
+series数据对齐，类似于数据库中的join操作，很有用，略。
+
+series对象自身和起索引都有name属性：`obj.name,  obj.index.name`
+
+series索引可以按位置赋值进行改变：
+
+```python
+# 将obj的前四个索引改为 a，b，c，d
+obj.index = ['a', 'b', 'c', 'd']
+```
+
+
+
+### 5.1.2 DataFrame
+
+矩阵数据表，包含了已排序的列集合，每一列可以是不同的值类型（类似一个二维表）。DataFrame有行索引和列索引，可以看做是多个共享索引的series字典（一列是一个series）。分层索引可以实现在二维的DataFrame上存储更高维的数据。
+
+构建方式一：用包含等长度列表或numpy数组的字典来形成
+
+```python
+data = {
+    'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada', 'Nevada'],
+    'year': [2000, 2001, 2002, 2001, 2002, 2003]
+    'pop': [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]
+}
+# 生成DataFrame，自动分配索引，按照排序的顺序排列
+frame = pd.DataFrame(data)
+```
+
+<img src="/Users/xuzhang/python_work/source/Xnip2020-07-28_23-27-41.jpg" alt="Xnip2020-07-28_23-27-41" style="zoom:50%;" />
+
+```python
+# 对于大型DataFrame，可以用frame.head()`方法只展示前5行
+frame.head()
+
+# 指定列的顺序，若某列不在字典中(debt)，则出现缺省值NaN
+pd.DataFrame(data, columns = ['year', 'state', 'pop', 'debt'])
+
+# 指定行索引
+pd.DataFrame(data, columns = [...], index = ['one', 'two', 'three','four', ...])
+
+# 根据列名将结果检索为series
+frame['state']
+
+# 根据位置或loc属性检索行
+frame.loc[3]
+
+
+```
+
+修改列值：
+
+```python
+# 该列值全改为2.5
+frame['debt'] = 2.5 
+
+# 将列表或数组赋值给一列时，长度必须相等
+frame['debt'] = np.arrange(6.)  # 改为从0.0到5.0
+
+# 将series赋值给列时，会按照索引匹配填入值，空缺的地方NaN
+val = pd.Series([1, 2, 3], index = ['two', 'four', 'five'])
+
+# 赋值的列不存在，则生成一个新的列
+...
+
+# del方法删除某列
+del frame['year']
+```
+
+DataFrame中选取的列是源数据的视图，修改会改变DataFrame，若要复制需要显式的使用copy方法
+
+构建方法二：包含字典的嵌套字典构建
+
+```python
+pop = {
+    'Nevada': {2001: 2.4, 2002: 2.9},
+    'Ohio': {2000:1.5, 2001: 1.7, 2002: 3.6}
+}
+# 创建DataFrame，字典的键作为列，内部字典的键作为索引
+frame = pd.DataFrame(pop)
+```
+
+<img src="/Users/xuzhang/python_work/source/Xnip2020-07-28_23-53-35.jpg" alt="Xnip2020-07-28_23-53-35" style="zoom:50%;" />
+
+```python
+# DataFrame的转置操作类似于numpy语法
+frame.T
+
+# 查看DataFrame的值,返回二维ndarray，如果有列dtypes不同，则values自动选择适合所有列的类型
+frame.values 
+```
+
+
+
+### 5.1.3 索引对象
+
+用于存储轴标签和其他源数据。构造series和dataframe时，任意数组或标签序列都可以转换为索引对象，dtype = 'object'。
+
+索引对象不可变，用户无法修改，使得在多种数据结构中分享索引对象更安全。在构建series或dataframe时可以使用确定好的索引对象来避免被修改。
+
+索引对象中可以包含重复的标签。
+
+## 5.2 基本功能
+
+### 5.2.1 重建索引
+
