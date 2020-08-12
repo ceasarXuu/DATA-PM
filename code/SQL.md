@@ -19,7 +19,7 @@ Sublime Text 3
 不多推荐，就这一个，最好用的功能：
 
 1. snippet自定义代码块：一般常用的表、常用的写法，写来写去就那么几种，可以写一个snippet自定义代码块，通过关键词“一键召唤”出来，简单修改即可复用，SQL民工搬砖第一大神器！大爱！
-2. 全局输入提示：输入的时候
+2. 全局补全插件：
 
 
 
@@ -40,17 +40,17 @@ Sublime Text 3
 
 ```sql
 SELECT 
-		user_info.clomun1 AS name1,
-		user_info.clomun2 AS name2,
-		COUNT(userid) AS user_num
+	user_info.clomun1 AS name1,
+	user_info.clomun2 AS name2,
+	COUNT(userid) AS user_num
 FROM 
-		(
-    SELECT 
+	(
+    SELECT
     ) AS user_employee
 WHERE
-		date = 20200101
-		AND plat = 'iOS'
-GROUP BY 
+	date = '20200101'
+	AND plat = 'iOS'
+GROUP BY
 		
 		
 
