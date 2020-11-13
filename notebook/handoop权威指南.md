@@ -32,7 +32,7 @@ hadoop相较于其他系统的优势：
 
 MapReduce应视为关系型数据库管理系统RDBMS的补充，MapReduce适合解决需要批处理方式分析整个数据集的问题，RDBMS适用于索引后数据集的点查询和更新。MapReduce适合一次写入、多次读取的应用，RDBMS适用于持续更新的数据集。
 
-![image-20201025191037792](/Users/xuzhang/gitHub/DATA-PM/notebook/handoop权威指南.assets/image-20201025191037792.png)
+![image-20201025191037792](handoop权威指南.assets/image-20201025191037792.png)
 
 hadoop和RDBMS之间的界限很模糊，两者在互相借鉴靠拢，Hive（hadoop的一种）增加了索引和事务的特性， 更像RDBMS。
 
@@ -72,15 +72,15 @@ hadoop将一个作业分为多个任务（task），包括map类任务和reduce�
 
 map任务在存储了输入数据的节点上运行，即数据本地化优化，这样可以节省数据传输带宽（无需节点间传输、机架间传输）。当存储了输入数据的节点已经运行了其他map任务，则从同机架上找没有运行map任务的map槽（slot），并不得不将数据复制传输到其他节点，运行map任务；极少数情况下发生机跨机架任务。
 
-![image-20201027172027599](/Users/xuzhang/gitHub/DATA-PM/notebook/handoop权威指南.assets/image-20201027172027599.png)
+![image-20201027172027599](handoop权威指南.assets/image-20201027172027599.png)
 
 reduce任务没有“数据本地化”的概念，因为其输入来自多个mapp任务的输出，数据传输是免不了的。reduce任务的数量可以单独指定，当有多个reduce任务，map的输出也会进行分区，每个reduce任务对应一个分区，分区默认通过hash进行，也可自定义。reduce任务的数量可以有1、n、0三种，有n多个reduce任务时，reduce任务间的数据流称为shuffle混洗；当数据处理（map）可以完全并行（无需混洗）时，会出现无reduce任务的情况，map直接将结果写入HDFS。
 
-![image-20201027173950963](/Users/xuzhang/gitHub/DATA-PM/notebook/handoop权威指南.assets/image-20201027173950963.png)
+![image-20201027173950963](handoop权威指南.assets/image-20201027173950963.png)
 
-![image-20201027173959701](/Users/xuzhang/gitHub/DATA-PM/notebook/handoop权威指南.assets/image-20201027173959701.png)
+![image-20201027173959701](handoop权威指南.assets/image-20201027173959701.png)
 
-![image-20201027174009376](/Users/xuzhang/gitHub/DATA-PM/notebook/handoop权威指南.assets/image-20201027174009376.png)
+![image-20201027174009376](handoop权威指南.assets/image-20201027174009376.png)
 
 
 
