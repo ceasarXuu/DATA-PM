@@ -1,0 +1,74 @@
+# spide
+
+崔庆才教程 https://cuiqingcai.com/5052.html
+
+整体架构
+
+request提供阻塞式的http请求方式库
+
+selenium包提供浏览器引擎的驱动方式库
+
+
+
+## 环境配置
+
+至今还是搞的不是很清楚， 在terminal、conda、pycharm中安装package是怎么个机制，总之用pycharm中使用conda python编译器，然后用pycharm直接在代码中自动安装package是最稳健的，一定能保证代码可以运行起来，其中的原理以后再说叭哈哈哈
+
+### 遇到过的问题
+
+##### chromedriver安装
+
+1. driver版本需要与电脑上的浏览器版本一致，https://cuiqingcai.com/5135.html
+
+2. 闪退问题：https://blog.csdn.net/weixin_42603129/article/details/105561926?utm_medium=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-1.nonecase&depth_1-utm_source=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-1.nonecase
+
+    将driver作为全局变量时就不会发生闪退（内部声明global或者直接放在全局）
+
+##### phantomJS
+
+使用phantomJS就是为了有一个不会弹出浏览器的webkit浏览器引擎，但是已经不再更新和被selenium支持，可以使用chrome和firefox的无头模式，同样可以不弹出浏览器，达到无界面配置的效果
+
+Chrome 的无头模式：https://blog.csdn.net/qq_43055565/article/details/99345542
+
+```python
+from selenium.webdriver.chrome.options import Options
+# 创建option实例，天极爱headless参数
+opt = Options()
+opt.add_argument('--headless')
+# 启动chrome时使用配置选项
+browser = webdriver.Chrome(options=opt)
+# 访问百度，打印验证是否成功
+browser.get('https://baidu.com/')
+print(browser.page_source)
+```
+
+##### redis
+
+python安装redis包时，在pycharm+conda下，pycharm直接安装显示成功，但是实际并没有安装到conda环境中，需要在terminal中用conda安装
+
+```shell
+conda install redis-py
+```
+
+此时 import redis 成功
+
+
+
+##### pyspider
+
+https://cuiqingcai.com/5416.html
+
+
+
+##### homebrew安装
+
+brew install xxx
+
+长时间卡在updating https://www.jianshu.com/p/7cb05a2b39a5
+
+（另：vim的用法https://www.runoob.com/linux/linux-vim.html）
+
+
+
+
+
