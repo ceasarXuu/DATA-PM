@@ -124,4 +124,5 @@ AB测试是一种工具，通过科学的实验设计、采样样本代表性、
 
 ## 参考文章
 
-1. 腾讯技术工程 《什么是A/B测试？》https://www.zhihu.com/question/20045543
+1. 什么是 A/B 测试？ - 腾讯技术工程的回答 - 知乎 https://www.zhihu.com/question/20045543/answer/1103961403
+2. 《A/B test到底应该怎么做》https://www.zhihu.com/question/22537349/answer/620073169
